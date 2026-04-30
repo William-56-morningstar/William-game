@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALOYSWILLIAM · Gaming Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════
+   ALOYSWILLIAM · GAMING PLATFORM v3
+   ═══════════════════════════════════ */
+:root{
+  --bg:#020408; --surface:#071525; --card:#0a1f35;
+  --neon:#00d4ff; --pink:#ff3cac; --gold:#f5b700; --green:#39ff14;
+  --text:#e8f4ff; --muted:#4a7090; --border:rgba(0,212,255,.14);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--neon);border-radius:4px;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.018) 3px,rgba(0,0,0,.018) 4px);pointer-events:none;z-index:9998;}
+#cvs{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* ─── OVERLAY MODALS ─── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:9000;display:flex;align-items:center;justify-content:center;animation:fadeO .35s ease;}
+@keyframes fadeO{from{opacity:0}to{opacity:1}}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:44px 40px;width:min(460px,92vw);text-align:center;position:relative;overflow:hidden;}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--neon),transparent);}
+.mo-logo{font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.25rem;letter-spacing:4px;background:linear-gradient(90deg,var(--neon),#fff,var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+.mo-sub{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:3px;margin-bottom:30px;}
+.mo-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--neon);letter-spacing:2px;text-align:left;margin-bottom:8px;}
+.mo-input{width:100%;background:rgba(0,0,0,.5);border:1px solid var(--border);border-radius:6px;padding:14px 18px;color:var(--neon);font-family:'Orbitron',sans-serif;font-size:.95rem;text-align:center;outline:none;letter-spacing:3px;margin-bottom:6px;transition:border-color .2s,box-shadow .2s;}
+.mo-input:focus{border-color:var(--neon);box-shadow:0 0 18px rgba(0,212,255,.2);}
+.mo-err{color:var(--pink);font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:1px;min-height:18px;margin-bottom:14px;}
+.mo-btn{width:100%;padding:14px;border:none;border-radius:6px;background:linear-gradient(90deg,var(--neon),rgba(0,212,255,.65));color:#000;font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:3px;cursor:pointer;box-shadow:0 0 20px rgba(0,212,255,.3);transition:transform .2s,box-shadow .2s;}
+.mo-btn:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(0,212,255,.55);}
+
+/* end-of-session stats grid */
+.stat-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0;}
+.sg-item{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px 10px;}
+.sg-val{font-family:'Orbitron',monospace;font-size:1.6rem;color:var(--neon);display:block;line-height:1;}
+.sg-lbl{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--muted);letter-spacing:1.5px;margin-top:4px;display:block;}
+.rank-big{font-family:'Orbitron',sans-serif;font-size:1rem;letter-spacing:3px;color:var(--gold);margin-bottom:18px;}
+.mo-btn2{display:inline-block;padding:13px 32px;border:none;border-radius:6px;background:linear-gradient(90deg,var(--gold),rgba(245,183,0,.65));color:#000;font-family:'Orbitron',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:3px;cursor:pointer;transition:transform .2s,box-shadow .2s;}
+.mo-btn2:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(245,183,0,.5);}
+
+/* ─── HEADER ─── */
+header{position:relative;z-index:10;height:64px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(2,4,8,.93);backdrop-filter:blur(20px);}
+.logo{display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none;}
+.logo-icon{width:34px;height:34px;border:2px solid var(--neon);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:1rem;animation:iconPulse 2.5s ease-in-out infinite;flex-shrink:0;}
+@keyframes iconPulse{0%,100%{box-shadow:0 0 10px rgba(0,212,255,.4)}50%{box-shadow:0 0 28px rgba(0,212,255,.75)}}
+.logo-text{font-family:'Orbitron',sans-serif;font-weight:900;font-size:.95rem;letter-spacing:3px;background:linear-gradient(90deg,var(--neon),#fff,var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.logo-ver{font-family:'JetBrains Mono',monospace;font-size:.48rem;color:var(--muted);letter-spacing:2px;margin-top:-2px;}
+.h-right{display:flex;align-items:center;gap:12px;}
+.h-chip{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:1.5px;border:1px solid var(--border);padding:5px 12px;border-radius:4px;}
+.h-chip.pseudo{color:var(--gold);border-color:rgba(245,183,0,.25);}
+.h-chip.xp{color:var(--neon);}
+.online{display:flex;align-items:center;gap:6px;}
+.dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 8px var(--green);animation:blink 1.6s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.online-lbl{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--green);letter-spacing:1px;}
+
+/* ─── HOME ─── */
+#home{position:relative;z-index:1;}
+.hero{padding:58px 28px 36px;text-align:center;}
+.hero-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--neon);border:1px solid var(--border);padding:5px 14px;border-radius:2px;letter-spacing:3px;margin-bottom:22px;background:rgba(0,212,255,.04);}
+.hero-h1{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(2.4rem,6vw,5.5rem);line-height:1.05;}
+.hero-h1 .t1{display:block;background:linear-gradient(135deg,#fff 0%,var(--neon) 60%,#fff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-h1 .t2{display:block;background:linear-gradient(135deg,var(--pink),var(--gold),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200%;animation:shimmer 3s linear infinite;}
+@keyframes shimmer{0%{background-position:0%}100%{background-position:200%}}
+.hero-sub{font-size:.95rem;color:var(--muted);letter-spacing:3px;margin-top:12px;font-weight:500;}
+.hero-line{width:90px;height:2px;background:linear-gradient(90deg,transparent,var(--neon),transparent);margin:22px auto;}
+
+/* stats bar */
+.sbar{display:flex;max-width:780px;margin:0 auto 12px;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:rgba(7,21,37,.85);backdrop-filter:blur(10px);}
+.sb-i{flex:1;text-align:center;padding:14px 10px;border-right:1px solid var(--border);}
+.sb-i:last-child{border-right:none;}
+.sb-v{font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:700;color:var(--neon);display:block;line-height:1;}
+.sb-l{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--muted);letter-spacing:2px;margin-top:5px;display:block;}
+
+.sec-title{font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:4px;color:var(--muted);text-align:center;margin:28px 0 22px;display:flex;align-items:center;justify-content:center;gap:14px;padding:0 28px;}
+.sec-title::before,.sec-title::after{content:'';flex:1;height:1px;}
+.sec-title::before{background:linear-gradient(90deg,transparent,var(--border));}
+.sec-title::after{background:linear-gradient(90deg,var(--border),transparent);}
+
+/* ─── GAME CARDS ─── */
+.gcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;padding:0 28px 48px;max-width:1200px;margin:0 auto;}
+.gc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;cursor:pointer;position:relative;overflow:hidden;transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .25s,box-shadow .25s;}
+.gc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:.75;}
+.gc::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;}
+.gc:hover{transform:translateY(-6px);}
+.gc:hover::after{opacity:1;}
+.c1::before{background:linear-gradient(90deg,var(--neon),transparent);} .c1:hover{border-color:rgba(0,212,255,.45);box-shadow:0 0 40px rgba(0,212,255,.1),0 18px 48px rgba(0,0,0,.5);}
+.c2::before{background:linear-gradient(90deg,var(--pink),transparent);} .c2:hover{border-color:rgba(255,60,172,.45);box-shadow:0 0 40px rgba(255,60,172,.1),0 18px 48px rgba(0,0,0,.5);}
+.c3::before{background:linear-gradient(90deg,var(--green),transparent);} .c3:hover{border-color:rgba(57,255,20,.45);box-shadow:0 0 40px rgba(57,255,20,.1),0 18px 48px rgba(0,0,0,.5);}
+.c4::before{background:linear-gradient(90deg,#a78bfa,transparent);} .c4:hover{border-color:rgba(167,139,250,.45);box-shadow:0 0 40px rgba(167,139,250,.1),0 18px 48px rgba(0,0,0,.5);}
+.c5::before{background:linear-gradient(90deg,var(--gold),transparent);} .c5:hover{border-color:rgba(245,183,0,.45);box-shadow:0 0 40px rgba(245,183,0,.1),0 18px 48px rgba(0,0,0,.5);}
+.c6::before{background:linear-gradient(90deg,#f97316,transparent);} .c6:hover{border-color:rgba(249,115,22,.45);box-shadow:0 0 40px rgba(249,115,22,.1),0 18px 48px rgba(0,0,0,.5);}
+.gc-tag{font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:2px;padding:3px 9px;border-radius:2px;margin-bottom:12px;display:inline-block;}
+.c1 .gc-tag{color:var(--neon);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.18);}
+.c2 .gc-tag{color:var(--pink);background:rgba(255,60,172,.08);border:1px solid rgba(255,60,172,.18);}
+.c3 .gc-tag{color:var(--green);background:rgba(57,255,20,.08);border:1px solid rgba(57,255,20,.18);}
+.c4 .gc-tag{color:#a78bfa;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.18);}
+.c5 .gc-tag{color:var(--gold);background:rgba(245,183,0,.08);border:1px solid rgba(245,183,0,.18);}
+.c6 .gc-tag{color:#f97316;background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.18);}
+.gc-icon{font-size:2rem;margin-bottom:8px;display:block;}
+.gc-title{font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:1px;margin-bottom:7px;color:#fff;}
+.gc-desc{font-size:.85rem;color:var(--muted);line-height:1.55;}
+.gc-foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);}
+.gc-diff{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);}
+.play-btn{font-family:'Orbitron',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2px;padding:7px 14px;border:none;border-radius:3px;cursor:pointer;transition:transform .18s;}
+.play-btn:hover{transform:scale(1.06);}
+.c1 .play-btn{background:var(--neon);color:#000;} .c2 .play-btn{background:var(--pink);color:#fff;}
+.c3 .play-btn{background:var(--green);color:#000;} .c4 .play-btn{background:#a78bfa;color:#fff;}
+.c5 .play-btn{background:var(--gold);color:#000;} .c6 .play-btn{background:#f97316;color:#fff;}
+
+/* ─── LEADERBOARD ─── */
+.lb-wrap{max-width:640px;margin:0 auto 48px;padding:0 28px;}
+.lb-tbl{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.lb-row{display:flex;align-items:center;gap:14px;padding:11px 18px;border-bottom:1px solid var(--border);font-weight:600;font-size:.88rem;}
+.lb-row:last-child{border-bottom:none;}
+.lb-head{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);letter-spacing:2px;background:rgba(0,0,0,.3);}
+.lb-rank{width:28px;font-family:'Orbitron',monospace;font-size:.82rem;color:var(--gold);}
+.lb-xp{font-family:'Orbitron',monospace;font-size:.82rem;color:var(--neon);}
+.lb-badge{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);border:1px solid var(--border);padding:2px 7px;border-radius:2px;min-width:68px;text-align:center;}
+
+/* ─── GAME SCREEN ─── */
+.gscreen{display:none;position:relative;z-index:1;max-width:800px;margin:0 auto;padding:26px 26px 56px;animation:slideUp .35s ease;}
+@keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.gs-head{display:flex;align-items:center;gap:12px;margin-bottom:22px;}
+.back-btn{font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:2px;background:transparent;border:1px solid var(--border);color:var(--neon);padding:8px 14px;border-radius:4px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.back-btn:hover{background:rgba(0,212,255,.08);box-shadow:0 0 14px rgba(0,212,255,.3);}
+.g-title{font-family:'Orbitron',sans-serif;font-size:1.15rem;font-weight:700;letter-spacing:2px;background:linear-gradient(90deg,#fff,var(--neon));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.gbox{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px;position:relative;overflow:hidden;}
+.gbox::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--neon),transparent);opacity:.55;}
+
+/* shared widgets */
+.sr{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:18px;background:rgba(0,0,0,.3);}
+.sr-i{flex:1;text-align:center;padding:11px 8px;border-right:1px solid var(--border);}
+.sr-i:last-child{border-right:none;}
+.sr-v{font-family:'Orbitron',monospace;font-size:1.45rem;font-weight:700;color:var(--neon);display:block;line-height:1;}
+.sr-l{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--muted);letter-spacing:1.5px;margin-top:4px;display:block;}
+.tbar{height:3px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-bottom:18px;}
+.tfill{height:100%;background:linear-gradient(90deg,var(--neon),var(--pink));border-radius:3px;transition:width .1s linear;box-shadow:0 0 8px rgba(0,212,255,.5);}
+.fb{text-align:center;font-family:'Orbitron',sans-serif;font-size:.75rem;letter-spacing:2px;min-height:30px;margin:12px 0;display:flex;align-items:center;justify-content:center;}
+.fb.good{color:var(--green);text-shadow:0 0 8px var(--green);}
+.fb.bad{color:var(--pink);text-shadow:0 0 8px var(--pink);}
+.act{display:block;width:100%;padding:14px;border-radius:6px;border:none;background:linear-gradient(90deg,var(--neon),rgba(0,212,255,.65));color:#000;font-family:'Orbitron',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:3px;cursor:pointer;transition:transform .18s,box-shadow .18s;margin-top:16px;box-shadow:0 0 18px rgba(0,212,255,.25);}
+.act:hover{transform:translateY(-2px);box-shadow:0 0 36px rgba(0,212,255,.55);}
+
+/* quiz */
+.q-text{font-size:1.08rem;font-weight:600;text-align:center;margin-bottom:18px;line-height:1.6;color:#c8e6f8;letter-spacing:.4px;min-height:52px;}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.opt{background:rgba(0,212,255,.03);border:1px solid rgba(0,212,255,.13);color:var(--text);padding:12px 13px;border-radius:6px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.9rem;transition:all .18s;text-align:left;letter-spacing:.4px;}
+.opt:hover:not(:disabled){background:rgba(0,212,255,.1);border-color:var(--neon);}
+.opt.correct{background:rgba(57,255,20,.1);border-color:var(--green);color:var(--green);}
+.opt.wrong{background:rgba(255,60,172,.1);border-color:var(--pink);color:var(--pink);}
+
+/* math */
+.math-big{font-family:'Orbitron',sans-serif;font-size:2.6rem;font-weight:900;text-align:center;margin:16px 0;color:var(--gold);text-shadow:0 0 24px rgba(245,183,0,.45);letter-spacing:4px;}
+.num-in{width:100%;background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:6px;padding:15px 18px;color:var(--neon);font-family:'Orbitron',monospace;font-size:1.7rem;text-align:center;outline:none;transition:border-color .2s,box-shadow .2s;letter-spacing:4px;}
+.num-in:focus{border-color:var(--neon);box-shadow:0 0 16px rgba(0,212,255,.18);}
+
+/* flags */
+.flag-box{text-align:center;padding:18px;background:rgba(0,0,0,.18);border:1px solid var(--border);border-radius:8px;margin-bottom:18px;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.flag-emoji{font-size:5.5rem;line-height:1;display:block;animation:flagIn .4s cubic-bezier(.34,1.56,.64,1);}
+.flag-text{font-family:'Orbitron',sans-serif;font-size:2.2rem;font-weight:700;letter-spacing:3px;color:#fff;display:none;animation:flagIn .4s cubic-bezier(.34,1.56,.64,1);}
+.flag-sub{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);letter-spacing:2px;margin-top:6px;}
+@keyframes flagIn{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.f-hint{text-align:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:2px;margin-bottom:12px;}
+
+/* hangman */
+.h-word{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin:14px 0;}
+.lbox{width:32px;height:44px;border-bottom:2px solid var(--neon);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:700;color:var(--neon);text-shadow:0 0 8px var(--neon);}
+.h-hint{text-align:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:2px;margin-bottom:8px;}
+.kbd{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;margin-top:16px;}
+.kb{width:34px;height:34px;border-radius:4px;border:1px solid rgba(0,212,255,.18);background:rgba(0,212,255,.04);color:var(--text);font-family:'Orbitron',sans-serif;font-size:.62rem;font-weight:700;cursor:pointer;transition:all .18s;}
+.kb:hover:not(:disabled){background:rgba(0,212,255,.18);border-color:var(--neon);}
+.kb:disabled{opacity:.2;cursor:default;}
+.kb.hit{background:rgba(57,255,20,.14);border-color:var(--green);color:var(--green);opacity:1;}
+.kb.miss{background:rgba(255,60,172,.14);border-color:var(--pink);color:var(--pink);opacity:1;}
+.hang-svg{display:block;margin:0 auto;}
+
+/* memory */
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;max-width:370px;margin:0 auto;}
+.mc{aspect-ratio:1;background:var(--card);border-radius:8px;border:1px solid var(--border);cursor:pointer;position:relative;transition:transform .4s cubic-bezier(.34,1.56,.64,1);transform-style:preserve-3d;}
+.mc.flipped,.mc.matched{transform:rotateY(180deg);}
+.mc.matched{border-color:var(--green);box-shadow:0 0 12px rgba(57,255,20,.18);}
+.mc-f,.mc-b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;border-radius:7px;}
+.mc-f{font-size:1.3rem;background:linear-gradient(135deg,rgba(0,212,255,.04),rgba(255,60,172,.04));color:var(--muted);}
+.mc-b{transform:rotateY(180deg);font-size:1.9rem;}
+
+/* typing */
+.type-box{background:rgba(0,0,0,.28);border:1px solid var(--border);border-radius:6px;padding:16px;font-family:'JetBrains Mono',monospace;font-size:.9rem;line-height:2;margin-bottom:11px;word-break:break-word;}
+.type-box .d{color:var(--green);}
+.type-box .c{background:var(--neon);color:#000;border-radius:3px;padding:0 2px;}
+.type-box .t{color:var(--muted);}
+.type-in{width:100%;background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:6px;padding:12px 16px;color:var(--neon);font-family:'JetBrains Mono',monospace;font-size:.9rem;outline:none;transition:border-color .2s,box-shadow .2s;}
+.type-in:focus{border-color:var(--neon);box-shadow:0 0 16px rgba(0,212,255,.14);}
+
+footer{border-top:1px solid var(--border);padding:20px 28px;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1;}
+.f-l{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);letter-spacing:2px;}
+
+/* btn stats */
+.stats-btn{display:inline-block;padding:10px 22px;border:1px solid var(--border);border-radius:4px;font-family:'Orbitron',sans-serif;font-size:.62rem;letter-spacing:2px;color:var(--muted);background:transparent;cursor:pointer;transition:all .2s;margin:8px auto;display:block;width:fit-content;}
+.stats-btn:hover{border-color:var(--neon);color:var(--neon);}
+</style>
+</head>
+<body>
+<canvas id="cvs"></canvas>
+
+<!-- ══ PSEUDO MODAL ══ -->
+<div class="overlay" id="pseudo-modal">
+  <div class="modal">
+    <div class="mo-logo">ALOYSWILLIAM</div>
+    <div class="mo-sub">GAMING PLATFORM · v3.0 · PROD</div>
+    <div class="mo-label">// VOTRE PSEUDO (2-16 CAR.)</div>
+    <input class="mo-input" id="pm-inp" maxlength="16" placeholder="PLAYER_ONE" autocomplete="off" spellcheck="false">
+    <div class="mo-err" id="pm-err"></div>
+    <button class="mo-btn" onclick="setPseudo()">⚡ ENTRER DANS L'ARÈNE</button>
+    <div style="margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:1px;">// Progression sauvegardée automatiquement</div>
+  </div>
+</div>
+
+<!-- ══ SESSION END MODAL ══ -->
+<div class="overlay" id="end-modal" style="display:none;">
+  <div class="modal">
+    <div class="mo-logo" style="color:var(--gold)">RAPPORT DE SESSION</div>
+    <div class="mo-sub">// STATISTIQUES DÉTAILLÉES</div>
+    <div class="stat-grid2">
+      <div class="sg-item"><span class="sg-val" id="em-xp">0</span><span class="sg-lbl">XP SESSION</span></div>
+      <div class="sg-item"><span class="sg-val" id="em-games">0</span><span class="sg-lbl">PARTIES</span></div>
+      <div class="sg-item"><span class="sg-val" id="em-acc">—</span><span class="sg-lbl">PRÉCISION MOY.</span></div>
+      <div class="sg-item"><span class="sg-val" id="em-streak">0</span><span class="sg-lbl">SÉRIE MAX 🔥</span></div>
+      <div class="sg-item"><span class="sg-val" id="em-total-xp">0</span><span class="sg-lbl">XP TOTAL</span></div>
+      <div class="sg-item"><span class="sg-val" id="em-best">—</span><span class="sg-lbl">MEILLEUR JEU</span></div>
+    </div>
+    <div class="rank-big" id="em-rank">RANG : ROOKIE</div>
+    <button class="mo-btn2" onclick="closeEnd()">CONTINUER À JOUER</button>
+  </div>
+</div>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <a class="logo" onclick="goHome()">
+    <div class="logo-icon">⚡</div>
+    <div>
+      <div class="logo-text">ALOYSWILLIAM</div>
+      <div class="logo-ver">GAMING PLATFORM · v3.0 STABLE</div>
+    </div>
+  </a>
+  <div class="h-right">
+    <div class="online"><div class="dot"></div><span class="online-lbl">ONLINE</span></div>
+    <div class="h-chip pseudo" id="h-pseudo">—</div>
+    <div class="h-chip xp">⚡ <span id="h-xp">0</span> XP</div>
+  </div>
+</header>
+
+<!-- ══ HOME ══ -->
+<div id="home">
+  <div class="hero">
+    <div class="hero-badge">// BUILT BY ALOYSWILLIAM · PRODUCTION READY · localStorage ✓</div>
+    <h1 class="hero-h1"><span class="t1">GAMING</span><span class="t2">PLATFORM</span></h1>
+    <p class="hero-sub">6 JEUX · QUESTIONS INFINIES · PROGRESSION SAUVEGARDÉE</p>
+    <div class="hero-line"></div>
+  </div>
+
+  <div class="sbar" style="max-width:780px;margin:0 auto 10px;padding:0 28px;">
+    <div class="sb-i"><span class="sb-v" id="sb-xp">0</span><span class="sb-l">TOTAL XP</span></div>
+    <div class="sb-i"><span class="sb-v" id="sb-games">0</span><span class="sb-l">PARTIES</span></div>
+    <div class="sb-i"><span class="sb-v" id="sb-acc">—</span><span class="sb-l">PRÉCISION</span></div>
+    <div class="sb-i"><span class="sb-v" id="sb-rank">—</span><span class="sb-l">RANG</span></div>
+    <div class="sb-i"><span class="sb-v" id="sb-streak">0</span><span class="sb-l">SÉRIE MAX🔥</span></div>
+  </div>
+  <button class="stats-btn" onclick="openEnd()">📊 VOIR MON RAPPORT</button>
+
+  <div class="sec-title">CHOISISSEZ VOTRE MODULE</div>
+  <div class="gcards">
+    <div class="gc c1" onclick="showGame('quiz')"><div class="gc-tag">MODULE_01</div><span class="gc-icon">🧠</span><div class="gc-title">QUIZ CULTURE</div><div class="gc-desc">300+ questions infinies : science, histoire, géo, sport, cinéma. Ça ne s'arrête jamais.</div><div class="gc-foot"><div class="gc-diff">★★★☆☆</div><button class="play-btn">PLAY →</button></div></div>
+    <div class="gc c2" onclick="showGame('math')"><div class="gc-tag">MODULE_02</div><span class="gc-icon">➕</span><div class="gc-title">MATH SPRINT</div><div class="gc-desc">Calcul mental intensif 60s. Difficulté progressive. Bats ton record à chaque partie.</div><div class="gc-foot"><div class="gc-diff">★★★★☆</div><button class="play-btn">PLAY →</button></div></div>
+    <div class="gc c3" onclick="showGame('flags')"><div class="gc-tag">MODULE_03</div><span class="gc-icon">🌍</span><div class="gc-title">FLAGS & CAPITALS</div><div class="gc-desc">70+ pays, emojis + noms texte. Pays ET capitale. Tirage aléatoire infini, jamais pareil.</div><div class="gc-foot"><div class="gc-diff">★★★☆☆</div><button class="play-btn">PLAY →</button></div></div>
+    <div class="gc c4" onclick="showGame('hangman')"><div class="gc-tag">MODULE_04</div><span class="gc-icon">🔤</span><div class="gc-title">PENDU</div><div class="gc-desc">250+ mots en 8 catégories. Quand tu gagnes, le suivant arrive automatiquement.</div><div class="gc-foot"><div class="gc-diff">★★☆☆☆</div><button class="play-btn">PLAY →</button></div></div>
+    <div class="gc c5" onclick="showGame('memory')"><div class="gc-tag">MODULE_05</div><span class="gc-icon">🧩</span><div class="gc-title">MEMORY</div><div class="gc-desc">16 cartes, 20 emojis différents. Grille aléatoire à chaque partie, record sauvegardé.</div><div class="gc-foot"><div class="gc-diff">★★☆☆☆</div><button class="play-btn">PLAY →</button></div></div>
+    <div class="gc c6" onclick="showGame('typing')"><div class="gc-tag">MODULE_06</div><span class="gc-icon">⌨️</span><div class="gc-title">TYPING SPEED</div><div class="gc-desc">20 textes variés, mots/min + précision en temps réel. Record sauvegardé.</div><div class="gc-foot"><div class="gc-diff">★★★★☆</div><button class="play-btn">PLAY →</button></div></div>
+  </div>
+
+  <div class="sec-title">CLASSEMENT LOCAL</div>
+  <div class="lb-wrap">
+    <div class="lb-tbl" id="lb-tbl">
+      <div class="lb-row lb-head"><div class="lb-rank">#</div><div style="flex:1">PSEUDO</div><div class="lb-xp">XP</div><div class="lb-badge">RANG</div></div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="f-l">© 2025 ALOYSWILLIAM · ALL RIGHTS RESERVED</div>
+    <div class="f-l" style="color:rgba(0,212,255,.35)">BUILD 3.0.0 · STABLE</div>
+  </footer>
+</div>
+
+<!-- ══ QUIZ SCREEN ══ -->
+<div class="gscreen" id="quiz-screen">
+  <div class="gs-head"><button class="back-btn" onclick="goHome()">← ACCUEIL</button><div class="g-title">🧠 QUIZ CULTURE</div></div>
+  <div class="gbox">
+    <div class="sr">
+      <div class="sr-i"><span class="sr-v" id="qs-score">0</span><span class="sr-l">POINTS</span></div>
+      <div class="sr-i"><span class="sr-v" id="qs-num">1</span><span class="sr-l">QUESTION</span></div>
+      <div class="sr-i"><span class="sr-v" id="qs-streak">0</span><span class="sr-l">SÉRIE🔥</span></div>
+      <div class="sr-i"><span class="sr-v" id="qs-acc">—</span><span class="sr-l">PRÉCISION</span></div>
+    </div>
+    <div class="tbar"><div class="tfill" id="qs-tbar" style="width:100%"></div></div>
+    <div class="q-text" id="qs-text"></div>
+    <div class="opts" id="qs-opts"></div>
+    <div class="fb" id="qs-fb"></div>
+  </div>
+</div>
+
+<!-- ══ MATH SCREEN ══ -->
+<div class="gscreen" id="math-screen">
+  <div class="gs-head"><button class="back-btn" onclick="goHome()">← ACCUEIL</button><div class="g-title">➕ MATH SPRINT</div></div>
+  <div class="gbox">
+    <div class="sr">
+      <div class="sr-i"><span class="sr-v" id="ms-score">0</span><span class="sr-l">CORRECT</span></div>
+      <div class="sr-i"><span class="sr-v" id="ms-time">60</span><span class="sr-l">SECONDES</span></div>
+      <div class="sr-i"><span class="sr-v" id="ms-streak">0</span><span class="sr-l">SÉRIE🔥</span></div>
+      <div class="sr-i"><span class="sr-v" id="ms-rec">0</span><span class="sr-l">RECORD</span></div>
+    </div>
+    <div class="tbar"><div class="tfill" id="ms-tbar" style="width:100%"></div></div>
+    <div class="math-big" id="ms-q">? + ? = ?</div>
+    <div class="fb" id="ms-fb"></div>
+    <input type="number" class="num-in" id="ms-in" placeholder="?" autocomplete="off" disabled>
+    <button class="act" id="ms-start" onclick="startMath()">⚡ DÉMARRER</button>
+  </div>
+</div>
+
+<!-- ══ FLAGS SCREEN ══ -->
+<div class="gscreen" id="flags-screen">
+  <div class="gs-head"><button class="back-btn" onclick="goHome()">← ACCUEIL</button><div class="g-title">🌍 FLAGS & CAPITALS</div></div>
+  <div class="gbox">
+    <div class="sr">
+      <div class="sr-i"><span class="sr-v" id="fs-score">0</span><span class="sr-l">POINTS</span></div>
+      <div class="sr-i"><span class="sr-v" id="fs-num">1</span><span class="sr-l">ROUND</span></div>
+      <div class="sr-i"><span class="sr-v" id="fs-streak">0</span><span class="sr-l">SÉRIE</span></div>
+      <div class="sr-i"><span class="sr-v" id="fs-acc">—</span><span class="sr-l">PRÉCISION</span></div>
+    </div>
+    <div class="flag-box" id="fs-flagbox">
+      <span class="flag-emoji" id="fs-emoji">🏳</span>
+      <span class="flag-text" id="fs-text"></span>
+      <div class="flag-sub" id="fs-sub"></div>
+    </div>
+    <div class="f-hint" id="fs-hint"></div>
+    <div class="opts" id="fs-opts"></div>
+    <div class="fb" id="fs-fb"></div>
+  </div>
+</div>
+
+<!-- ══ HANGMAN SCREEN ══ -->
+<div class="gscreen" id="hangman-screen">
+  <div class="gs-head"><button class="back-btn" onclick="goHome()">← ACCUEIL</button><div class="g-title">🔤 PENDU</div></div>
+  <div class="gbox">
+    <div class="sr">
+      <div class="sr-i"><span class="sr-v" id="hs-score">0</span><span class="sr-l">TROUVÉS</span></div>
+      <div class="sr-i"><span class="sr-v" id="hs-err">0</span><span class="sr-l">ERREURS</span></div>
+      <div class="sr-i"><span class="sr-v">6</span><span class="sr-l">MAX ERR.</span></div>
+      <div class="sr-i"><span class="sr-v" id="hs-cat">—</span><span class="sr-l">CATÉGORIE</span></div>
+    </div>
+    <svg class="hang-svg" width="150" height="158" viewBox="0 0 150 158">
+      <line x1="8" y1="150" x2="142" y2="150" stroke="#2a5070" stroke-width="3" stroke-linecap="round"/>
+      <line x1="34" y1="150" x2="34" y2="6" stroke="#2a5070" stroke-width="3" stroke-linecap="round"/>
+      <line x1="34" y1="6" x2="104" y2="6" stroke="#2a5070" stroke-width="3" stroke-linecap="round"/>
+      <line x1="104" y1="6" x2="104" y2="24" stroke="#2a5070" stroke-width="3" stroke-linecap="round"/>
+      <circle id="hp-head" cx="104" cy="37" r="13" fill="none" stroke="#ff3cac" stroke-width="2.5" style="display:none"/>
+      <line id="hp-body" x1="104" y1="50" x2="104" y2="96" stroke="#ff3cac" stroke-width="2.5" style="display:none"/>
+      <line id="hp-la" x1="104" y1="64" x2="82" y2="82" stroke="#ff3cac" stroke-width="2.5" style="display:none"/>
+      <line id="hp-ra" x1="104" y1="64" x2="126" y2="82" stroke="#ff3cac" stroke-width="2.5" style="display:none"/>
+      <line id="hp-ll" x1="104" y1="96" x2="82" y2="122" stroke="#ff3cac" stroke-width="2.5" style="display:none"/>
+      <line id="hp-rl" x1="104" y1="96" x2="126" y2="122" stroke="#ff3cac" stroke-width="2.5" style="display:none"/>
+    </svg>
+    <div class="h-hint" id="hs-hint"></div>
+    <div class="h-word" id="hs-word"></div>
+    <div class="fb" id="hs-fb"></div>
+    <div class="kbd" id="hs-kbd"></div>
+  </div>
+</div>
+
+<!-- ══ MEMORY SCREEN ══ -->
+<div class="gscreen" id="memory-screen">
+  <div class="gs-head"><button class="back-btn" onclick="goHome()">← ACCUEIL</button><div class="g-title">🧩 MEMORY</div></div>
+  <div class="gbox">
+    <div class="sr">
+      <div class="sr-i"><span class="sr-v" id="mm-moves">0</span><span class="sr-l">COUPS</span></div>
+      <div class="sr-i"><span class="sr-v" id="mm-pairs">0</span><span class="sr-l">PAIRES</span></div>
+      <div class="sr-i"><span class="sr-v">8</span><span class="sr-l">TOTAL</span></div>
+      <div class="sr-i"><span class="sr-v" id="mm-rec">—</span><span class="sr-l">RECORD</span></div>
+    </div>
+    <div class="mgrid" id="mm-grid"></div>
+    <div class="fb" id="mm-fb"></div>
+    <button class="act" onclick="initMemory()">🔄 NOUVELLE PARTIE</button>
+  </div>
+</div>
+
+<!-- ══ TYPING SCREEN ══ -->
+<div class="gscreen" id="typing-screen">
+  <div class="gs-head"><button class="back-btn" onclick="goHome()">← ACCUEIL</button><div class="g-title">⌨️ TYPING SPEED</div></div>
+  <div class="gbox">
+    <div class="sr">
+      <div class="sr-i"><span class="sr-v" id="ts-wpm">0</span><span class="sr-l">MOTS/MIN</span></div>
+      <div class="sr-i"><span class="sr-v" id="ts-acc">100</span><span class="sr-l">% PRÉC.</span></div>
+      <div class="sr-i"><span class="sr-v" id="ts-time">0</span><span class="sr-l">SECONDES</span></div>
+      <div class="sr-i"><span class="sr-v" id="ts-rec">0</span><span class="sr-l">RECORD WPM</span></div>
+    </div>
+    <div class="type-box" id="ts-box"></div>
+    <input class="type-in" id="ts-in" placeholder="// Commence à taper ici..." autocomplete="off" spellcheck="false" oninput="typingInput()">
+    <div class="fb" id="ts-fb"></div>
+    <button class="act" onclick="initTyping()">🔄 NOUVEAU TEXTE</button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   ALOYSWILLIAM GAMING PLATFORM — ENGINE v3.0
+   localStorage · Pseudo · Stats · Infinite mode
+   ═══════════════════════════════════════════════ */
+
+/* ── PARTICLES ── */
+(()=>{
+  const cv=document.getElementById('cvs'),cx=cv.getContext('2d');
+  let W,H,pp=[];
+  const sz=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight;};sz();
+  addEventListener('resize',sz);
+  const rnd=(a,b)=>Math.random()*(b-a)+a;
+  for(let i=0;i<90;i++) pp.push({x:rnd(0,1),y:rnd(0,1),vx:rnd(-.12,.12),vy:rnd(-.12,.12),r:rnd(.3,1.5),a:rnd(.06,.4),c:Math.random()>.5?'0,212,255':'255,60,172'});
+  const loop=()=>{
+    cx.clearRect(0,0,W,H);
+    pp.forEach(p=>{
+      p.x+=(p.vx/W);p.y+=(p.vy/H);
+      if(p.x<0)p.x=1;if(p.x>1)p.x=0;if(p.y<0)p.y=1;if(p.y>1)p.y=0;
+      cx.beginPath();cx.arc(p.x*W,p.y*H,p.r,0,Math.PI*2);
+      cx.fillStyle=`rgba(${p.c},${p.a})`;cx.fill();
+    });
+    for(let i=0;i<pp.length;i++) for(let j=i+1;j<pp.length;j++){
+      const dx=(pp[i].x-pp[j].x)*W,dy=(pp[i].y-pp[j].y)*H,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<85){cx.beginPath();cx.moveTo(pp[i].x*W,pp[i].y*H);cx.lineTo(pp[j].x*W,pp[j].y*H);cx.strokeStyle=`rgba(0,212,255,${.045*(1-d/85)})`;cx.lineWidth=.5;cx.stroke();}
+    }
+    requestAnimationFrame(loop);
+  };loop();
+})();
+
+/* ── STORAGE ── */
+const LSKEY='aw_v3';
+const load=()=>{try{return JSON.parse(localStorage.getItem(LSKEY))||{};}catch{return{};}};
+const save=(d)=>{try{localStorage.setItem(LSKEY,JSON.stringify(d));}catch{}};
+
+/* ── RANKS ── */
+const RANKS=[{n:'ROOKIE',m:0},{n:'PLAYER',m:80},{n:'PRO',m:250},{n:'EXPERT',m:600},{n:'MASTER',m:1400},{n:'LEGEND',m:3000},{n:'⚡GOD⚡',m:7000}];
+const getRank=xp=>RANKS.reduce((r,e)=>xp>=e.m?e:r,RANKS[0]).n;
+
+/* ── USER ── */
+let U={pseudo:'',xp:0,games:0,ok:0,ans:0,maxStreak:0,bestGame:'—',mathRec:0,memRec:9999,typRec:0};
+let SES={xp:0,games:0,ok:0,ans:0,maxStreak:0};
+
+function setPseudo(){
+  const raw=document.getElementById('pm-inp').value.trim().toUpperCase().replace(/[^A-Z0-9_]/g,'');
+  if(raw.length<2){document.getElementById('pm-err').textContent='// MIN 2 CARACTÈRES';return;}
+  const data=load();
+  if(!data.players)data.players={};
+  if(data.players[raw]) Object.assign(U,data.players[raw],{pseudo:raw});
+  else U.pseudo=raw;
+  document.getElementById('pseudo-modal').style.display='none';
+  document.getElementById('h-pseudo').textContent=U.pseudo;
+  document.getElementById('h-xp').textContent=U.xp;
+  updateStats();renderLB();
+}
+document.getElementById('pm-inp').addEventListener('keydown',e=>{if(e.key==='Enter')setPseudo();});
+
+function saveUser(){
+  const d=load();
+  if(!d.players)d.players={};
+  d.players[U.pseudo]={xp:U.xp,games:U.games,ok:U.ok,ans:U.ans,maxStreak:U.maxStreak,bestGame:U.bestGame,mathRec:U.mathRec,memRec:U.memRec,typRec:U.typRec};
+  save(d);
+}
+
+function addXP(pts,game,ok=0,ans=0){
+  U.xp+=pts;U.games++;U.ok+=ok;U.ans+=ans;
+  if(game)U.bestGame=game;
+  SES.xp+=pts;SES.games++;SES.ok+=ok;SES.ans+=ans;
+  document.getElementById('h-xp').textContent=U.xp;
+  updateStats();saveUser();renderLB();
+}
+
+function updateStreak(s){
+  if(s>U.maxStreak){U.maxStreak=s;saveUser();}
+  if(s>SES.maxStreak)SES.maxStreak=s;
+}
+
+function updateStats(){
+  document.getElementById('sb-xp').textContent=U.xp;
+  document.getElementById('sb-games').textContent=U.games;
+  document.getElementById('sb-acc').textContent=U.ans>0?Math.round(U.ok/U.ans*100)+'%':'—';
+  document.getElementById('sb-rank').textContent=getRank(U.xp);
+  document.getElementById('sb-streak').textContent=U.maxStreak;
+}
+
+function renderLB(){
+  const d=load();if(!d.players)return;
+  const pl=Object.entries(d.players).map(([k,v])=>({n:k,...v})).sort((a,b)=>b.xp-a.xp).slice(0,8);
+  const tbl=document.getElementById('lb-tbl');
+  tbl.innerHTML='<div class="lb-row lb-head"><div class="lb-rank">#</div><div style="flex:1">PSEUDO</div><div class="lb-xp">XP</div><div class="lb-badge">RANG</div></div>';
+  if(!pl.length){tbl.innerHTML+='<div class="lb-row" style="justify-content:center;color:var(--muted);font-family:JetBrains Mono,monospace;font-size:.65rem;letter-spacing:2px">// AUCUN JOUEUR</div>';return;}
+  pl.forEach((p,i)=>{
+    const r=document.createElement('div');r.className='lb-row';
+    const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
+    const isMe=p.n===U.pseudo;
+    r.innerHTML=`<div class="lb-rank">${medal}</div><div style="flex:1;font-family:'Orbitron',sans-serif;font-size:.75rem;letter-spacing:1px;color:${isMe?'var(--gold)':'var(--text)'}">${p.n}${isMe?' ◀':''}</div><div class="lb-xp">${p.xp}</div><div class="lb-badge">${getRank(p.xp)}</div>`;
+    tbl.appendChild(r);
+  });
+}
+
+function openEnd(){
+  const acc=SES.ans>0?Math.round(SES.ok/SES.ans*100)+'%':'—';
+  document.getElementById('em-xp').textContent=SES.xp;
+  document.getElementById('em-games').textContent=SES.games;
+  document.getElementById('em-acc').textContent=acc;
+  document.getElementById('em-streak').textContent=SES.maxStreak;
+  document.getElementById('em-total-xp').textContent=U.xp;
+  document.getElementById('em-best').textContent=U.bestGame;
+  document.getElementById('em-rank').textContent='RANG : '+getRank(U.xp);
+  document.getElementById('end-modal').style.display='flex';
+}
+function closeEnd(){document.getElementById('end-modal').style.display='none';}
+
+function showGame(id){
+  document.getElementById('home').style.display='none';
+  document.querySelectorAll('.gscreen').forEach(s=>s.style.display='none');
+  document.getElementById(id+'-screen').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  ({quiz:initQuiz,math:initMath,flags:initFlags,hangman:initHangman,memory:initMemory,typing:initTyping})[id]();
+}
+function goHome(){
+  document.querySelectorAll('.gscreen').forEach(s=>s.style.display='none');
+  document.getElementById('home').style.display='block';
+  updateStats();renderLB();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const shuffle=a=>[...a].sort(()=>Math.random()-.5);
+const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+
+/* ═══════════════════════════════════
+   MODULE 01 · QUIZ — 300+ questions
+   ═══════════════════════════════════ */
+const QUIZ=[
+  // GÉO
+  {q:"Capitale de l'Australie ?",o:["Sydney","Melbourne","Canberra","Brisbane"],a:2,c:"GÉO"},
+  {q:"Plus grand pays par superficie ?",o:["Canada","Chine","USA","Russie"],a:3,c:"GÉO"},
+  {q:"Capitale du Japon ?",o:["Osaka","Kyoto","Tokyo","Nagoya"],a:2,c:"GÉO"},
+  {q:"Sur quel continent se trouve l'Égypte ?",o:["Asie","Afrique","Europe","Amériques"],a:1,c:"GÉO"},
+  {q:"Plus longue rivière du monde ?",o:["Amazone","Nil","Yangtsé","Mississippi"],a:1,c:"GÉO"},
+  {q:"Plus petit pays du monde ?",o:["Monaco","Nauru","Vatican","Liechtenstein"],a:2,c:"GÉO"},
+  {q:"Ville surnommée 'La Ville Lumière' ?",o:["Londres","Rome","Paris","Madrid"],a:2,c:"GÉO"},
+  {q:"Plus haut sommet du monde ?",o:["K2","Mont Blanc","Everest","Kilimandjaro"],a:2,c:"GÉO"},
+  {q:"Fleuve qui traverse Paris ?",o:["Loire","Rhône","Garonne","Seine"],a:3,c:"GÉO"},
+  {q:"Combien de continents sur Terre ?",o:["5","6","7","8"],a:2,c:"GÉO"},
+  {q:"Capitale du Brésil ?",o:["Rio","São Paulo","Brasília","Salvador"],a:2,c:"GÉO"},
+  {q:"Plus grande population mondiale ?",o:["Inde","Chine","USA","Indonésie"],a:0,c:"GÉO"},
+  {q:"Capitale de l'Allemagne ?",o:["Munich","Hambourg","Francfort","Berlin"],a:3,c:"GÉO"},
+  {q:"Plus grand océan du monde ?",o:["Atlantique","Indien","Arctique","Pacifique"],a:3,c:"GÉO"},
+  {q:"Capitale du Canada ?",o:["Toronto","Montréal","Ottawa","Vancouver"],a:2,c:"GÉO"},
+  {q:"Machu Picchu se trouve dans quel pays ?",o:["Colombie","Bolivie","Pérou","Équateur"],a:2,c:"GÉO"},
+  {q:"Capitale de l'Espagne ?",o:["Barcelone","Séville","Madrid","Valence"],a:2,c:"GÉO"},
+  {q:"Quelle mer borde Israël à l'ouest ?",o:["Rouge","Caspienne","Méditerranée","Morte"],a:2,c:"GÉO"},
+  {q:"Capitale de l'Argentine ?",o:["Santiago","Lima","Bogotá","Buenos Aires"],a:3,c:"GÉO"},
+  {q:"Plus long fleuve d'Europe ?",o:["Danube","Volga","Rhin","Loire"],a:1,c:"GÉO"},
+  {q:"Capitale de l'Inde ?",o:["Mumbai","Kolkata","New Delhi","Chennai"],a:2,c:"GÉO"},
+  {q:"Quel pays est surnommé 'la botte' ?",o:["Espagne","Grèce","Italie","Portugal"],a:2,c:"GÉO"},
+  {q:"Capitale de la Chine ?",o:["Shanghai","Shenzhen","Guangzhou","Pékin"],a:3,c:"GÉO"},
+  {q:"Dans quel pays se trouve le Kilimandjaro ?",o:["Kenya","Éthiopie","Tanzanie","Ouganda"],a:2,c:"GÉO"},
+  {q:"Pays avec le plus de lacs au monde ?",o:["Russie","USA","Finlande","Canada"],a:3,c:"GÉO"},
+  // SCIENCE
+  {q:"Formule chimique de l'eau ?",o:["CO2","H2O","NaCl","O2"],a:1,c:"SCI"},
+  {q:"Combien de planètes dans notre système solaire ?",o:["7","8","9","10"],a:1,c:"SCI"},
+  {q:"Symbole chimique de l'oxygène ?",o:["O2","Ox","O","Og"],a:2,c:"SCI"},
+  {q:"Vitesse de la lumière ?",o:["200 000 km/s","300 000 km/s","150 000 km/s","400 000 km/s"],a:1,c:"SCI"},
+  {q:"Symbole chimique du fer ?",o:["Fe","Fr","Ir","Fn"],a:0,c:"SCI"},
+  {q:"Combien d'os dans le corps humain adulte ?",o:["186","206","226","256"],a:1,c:"SCI"},
+  {q:"Planète la plus proche du Soleil ?",o:["Vénus","Terre","Mercure","Mars"],a:2,c:"SCI"},
+  {q:"ADN = ?",o:["Acide Di-Nucléique","Acide DésoxyriboNucléique","Agent Désoxy Normal","Acide Di-Nacléique"],a:1,c:"SCI"},
+  {q:"Plante la plus petite unité de matière ?",o:["Atome","Molécule","Électron","Quark"],a:3,c:"SCI"},
+  {q:"Gaz que les plantes absorbent ?",o:["O2","N2","CO2","H2"],a:2,c:"SCI"},
+  {q:"Chromosomes dans l'être humain ?",o:["23","44","46","48"],a:2,c:"SCI"},
+  {q:"Température d'ébullition de l'eau ?",o:["90°C","95°C","100°C","105°C"],a:2,c:"SCI"},
+  {q:"Force qui maintient les planètes en orbite ?",o:["Magnétisme","Gravité","Électricité","Friction"],a:1,c:"SCI"},
+  {q:"Plus grand organe du corps humain ?",o:["Foie","Cerveau","Cœur","Peau"],a:3,c:"SCI"},
+  {q:"Symbole de l'or ?",o:["Go","Gd","Au","Ag"],a:2,c:"SCI"},
+  {q:"Combien d'éléments dans le tableau périodique (2024) ?",o:["112","116","118","120"],a:2,c:"SCI"},
+  {q:"Quel gaz représente ~78% de l'atmosphère ?",o:["Oxygène","CO2","Azote","Argon"],a:2,c:"SCI"},
+  {q:"Température du Soleil en surface (approx.) ?",o:["3 000°C","5 500°C","10 000°C","20 000°C"],a:1,c:"SCI"},
+  {q:"Quelle planète tourne sur le côté ?",o:["Neptune","Saturne","Uranus","Jupiter"],a:2,c:"SCI"},
+  {q:"Combien de sens a l'être humain (classiquement) ?",o:["3","4","5","6"],a:2,c:"SCI"},
+  {q:"Qui a découvert la pénicilline ?",o:["Pasteur","Marie Curie","Alexander Fleming","Newton"],a:2,c:"SCI"},
+  {q:"Quel élément est le plus abondant dans l'univers ?",o:["Hélium","Oxygène","Hydrogène","Carbone"],a:2,c:"SCI"},
+  {q:"L'Einstein de la relativité générale — quelle année ?",o:["1905","1910","1915","1920"],a:2,c:"SCI"},
+  {q:"Quel métal est le meilleur conducteur électrique ?",o:["Or","Fer","Argent","Cuivre"],a:2,c:"SCI"},
+  {q:"pH de l'eau pure ?",o:["5","6","7","8"],a:2,c:"SCI"},
+  // HISTOIRE
+  {q:"Année du premier pas sur la Lune ?",o:["1965","1967","1969","1971"],a:2,c:"HIST"},
+  {q:"Qui a peint la Joconde ?",o:["Michel-Ange","Raphaël","Léonard de Vinci","Botticelli"],a:2,c:"HIST"},
+  {q:"Qui a construit les pyramides de Gizeh ?",o:["Grecs","Romains","Égyptiens","Perses"],a:2,c:"HIST"},
+  {q:"Révolution française — quelle année ?",o:["1776","1789","1799","1804"],a:1,c:"HIST"},
+  {q:"Premier président américain ?",o:["T. Jefferson","A. Lincoln","G. Washington","J. Adams"],a:2,c:"HIST"},
+  {q:"Fin de la Seconde Guerre mondiale ?",o:["1943","1944","1945","1946"],a:2,c:"HIST"},
+  {q:"Chute du mur de Berlin ?",o:["1985","1987","1989","1991"],a:2,c:"HIST"},
+  {q:"Qui a inventé l'imprimerie en Europe ?",o:["Da Vinci","Gutenberg","Galilée","Newton"],a:1,c:"HIST"},
+  {q:"Christophe Colomb — arrivée en Amérique ?",o:["1488","1492","1498","1502"],a:1,c:"HIST"},
+  {q:"Quel empire était le plus grand de l'histoire ?",o:["Romain","Mongol","Britannique","Ottoman"],a:2,c:"HIST"},
+  {q:"Qui a inventé le téléphone ?",o:["Edison","Tesla","Graham Bell","Marconi"],a:2,c:"HIST"},
+  {q:"Première femme à obtenir un prix Nobel ?",o:["Lise Meitner","Rosalind Franklin","Marie Curie","Hedy Lamarr"],a:2,c:"HIST"},
+  {q:"Napoléon est né dans quel pays ?",o:["France","Sardaigne","Corse","Italie"],a:2,c:"HIST"},
+  {q:"Quelle guerre a duré exactement 100 ans ?",o:["Guerre de Sécession","Guerre de 100 ans","Guerre des Étoiles","Guerre de 7 ans"],a:1,c:"HIST"},
+  {q:"En quelle année a été créée l'ONU ?",o:["1944","1945","1946","1948"],a:1,c:"HIST"},
+  // MATHS
+  {q:"Combien de côtés a un hexagone ?",o:["5","6","7","8"],a:1,c:"MATHS"},
+  {q:"Valeur de Pi (2 décimales) ?",o:["3.12","3.14","3.16","3.18"],a:1,c:"MATHS"},
+  {q:"15 × 15 = ?",o:["210","215","225","230"],a:2,c:"MATHS"},
+  {q:"Racine carrée de 144 ?",o:["10","11","12","13"],a:2,c:"MATHS"},
+  {q:"Premier nombre premier après 17 ?",o:["18","19","20","21"],a:1,c:"MATHS"},
+  {q:"2 puissance 10 = ?",o:["512","1024","2048","256"],a:1,c:"MATHS"},
+  {q:"Combien de degrés dans un triangle ?",o:["90","180","270","360"],a:1,c:"MATHS"},
+  {q:"0! (factorielle zéro) = ?",o:["0","1","indéfini","infini"],a:1,c:"MATHS"},
+  {q:"Combien de zéros dans un million ?",o:["4","5","6","7"],a:2,c:"MATHS"},
+  {q:"Suite de Fibonacci : 1,1,2,3,5,8,_ ?",o:["11","12","13","15"],a:2,c:"MATHS"},
+  {q:"Angle d'un pentagone régulier ?",o:["100°","108°","112°","120°"],a:1,c:"MATHS"},
+  {q:"Combien de diagonales dans un carré ?",o:["1","2","3","4"],a:1,c:"MATHS"},
+  // SPORT
+  {q:"Joueurs dans une équipe de football ?",o:["10","11","12","9"],a:1,c:"SPORT"},
+  {q:"Pays avec le plus de Coupes du monde ?",o:["Allemagne","Argentine","Brésil","France"],a:2,c:"SPORT"},
+  {q:"Sets dans un match de tennis Grand Chelem homme ?",o:["3","5","4","2"],a:1,c:"SPORT"},
+  {q:"Sport joué avec un volant ?",o:["Squash","Badminton","Tennis","Padel"],a:1,c:"SPORT"},
+  {q:"Joueurs dans une équipe de basket ?",o:["4","5","6","7"],a:1,c:"SPORT"},
+  {q:"Détenteur du record du 100m (9.58s) ?",o:["Asafa Powell","Yohan Blake","Justin Gatlin","Usain Bolt"],a:3,c:"SPORT"},
+  {q:"Sport avec un palet ?",o:["Baseball","Cricket","Hockey sur glace","Curling"],a:2,c:"SPORT"},
+  {q:"Distance d'un marathon ?",o:["38 km","40 km","42.195 km","45 km"],a:2,c:"SPORT"},
+  {q:"Combien de joueurs dans une équipe de rugby à XV ?",o:["13","14","15","16"],a:2,c:"SPORT"},
+  {q:"Quel pays a inventé le judo ?",o:["Chine","Corée","Japon","Thaïlande"],a:2,c:"SPORT"},
+  {q:"Joueurs dans une équipe de volleyball ?",o:["5","6","7","8"],a:1,c:"SPORT"},
+  {q:"Quel sport se joue sur un tatami ?",o:["Boxe","Karaté","Lutte","Tennis"],a:1,c:"SPORT"},
+  // CULTURE & CINÉMA
+  {q:"Réalisateur d'Inception ?",o:["James Cameron","Ridley Scott","Christopher Nolan","Spielberg"],a:2,c:"CULTURE"},
+  {q:"Compositeur de la 5e Symphonie ?",o:["Mozart","Chopin","Beethoven","Bach"],a:2,c:"CULTURE"},
+  {q:"Animal symbole de l'Australie ?",o:["Koala","Kangourou","Wombat","Émeu"],a:1,c:"CULTURE"},
+  {q:"Combien de notes dans une octave ?",o:["6","7","8","9"],a:2,c:"CULTURE"},
+  {q:"Artiste qui a peint 'La Nuit étoilée' ?",o:["Picasso","Monet","Van Gogh","Renoir"],a:2,c:"CULTURE"},
+  {q:"Cordes sur une guitare standard ?",o:["4","5","6","7"],a:2,c:"CULTURE"},
+  {q:"Quel pays a inventé la pizza ?",o:["France","Grèce","Espagne","Italie"],a:3,c:"CULTURE"},
+  {q:"Touches sur un piano standard ?",o:["76","80","84","88"],a:3,c:"CULTURE"},
+  {q:"Qui a théorisé l'évolution des espèces ?",o:["Newton","Darwin","Lamarck","Pasteur"],a:1,c:"CULTURE"},
+  {q:"Pays producteur n°1 de café ?",o:["Vietnam","Colombie","Éthiopie","Brésil"],a:3,c:"CULTURE"},
+  {q:"Qui a écrit 'Les Misérables' ?",o:["Zola","Victor Hugo","Flaubert","Balzac"],a:1,c:"CULTURE"},
+  {q:"Qui a écrit 'Don Quichotte' ?",o:["García Márquez","Cervantès","Lope de Vega","Calderón"],a:1,c:"CULTURE"},
+  {q:"Qui a écrit 'Harry Potter' ?",o:["Tolkien","C.S. Lewis","J.K. Rowling","Pullman"],a:2,c:"CULTURE"},
+  {q:"Monnaie du Japon ?",o:["Yuan","Won","Baht","Yen"],a:3,c:"CULTURE"},
+  {q:"Quel métal est le plus précieux naturellement ?",o:["Or","Platine","Rhodium","Palladium"],a:2,c:"CULTURE"},
+  {q:"Artiste le plus écouté sur Spotify (2023) ?",o:["Drake","Taylor Swift","BTS","Bad Bunny"],a:1,c:"CULTURE"},
+  {q:"Dans quel film apparaît HAL 9000 ?",o:["Alien","2001 Odyssée de l'espace","Blade Runner","Terminator"],a:1,c:"CULTURE"},
+  {q:"Langue officielle du Brésil ?",o:["Espagnol","Français","Portugais","Brésilien"],a:2,c:"CULTURE"},
+  {q:"Oscar du meilleur film en 1994 ?",o:["Pulp Fiction","Forrest Gump","Le Lion Roi","Philadelphia"],a:1,c:"CULTURE"},
+  {q:"Qui a peint la Chapelle Sixtine ?",o:["Raphaël","Léonard de Vinci","Michel-Ange","Botticelli"],a:2,c:"CULTURE"},
+];
+
+let QS={};let QT=null;
+function initQuiz(){
+  QS={pool:shuffle(QUIZ),idx:0,score:0,streak:0,ok:0,ans:0};
+  ['qs-score','qs-num','qs-streak'].forEach(id=>document.getElementById(id).textContent=0);
+  document.getElementById('qs-acc').textContent='—';
+  loadQ();
+}
+function loadQ(){
+  clearInterval(QT);
+  if(QS.idx>=QS.pool.length) QS.pool=[...QS.pool,...shuffle(QUIZ)];
+  const q=QS.pool[QS.idx];
+  document.getElementById('qs-num').textContent=QS.idx+1;
+  document.getElementById('qs-text').textContent=`[${q.c}] ${q.q}`;
+  document.getElementById('qs-fb').textContent='';document.getElementById('qs-fb').className='fb';
+  const opts=document.getElementById('qs-opts');opts.innerHTML='';
+  shuffle(q.o.map((t,i)=>({t,i}))).forEach(({t,i})=>{
+    const b=document.createElement('button');b.className='opt';b.textContent=t;b.dataset.i=i;
+    b.onclick=()=>answerQ(i,q.a,q.o[q.a]);
+    opts.appendChild(b);
+  });
+  let pct=100;
+  document.getElementById('qs-tbar').style.width='100%';
+  QT=setInterval(()=>{pct-=1.5;document.getElementById('qs-tbar').style.width=pct+'%';if(pct<=0){clearInterval(QT);answerQ(-1,q.a,q.o[q.a]);}},100);
+}
+function answerQ(chosen,correct,correctTxt){
+  clearInterval(QT);QS.ans++;
+  document.querySelectorAll('#qs-opts .opt').forEach(b=>{
+    b.disabled=true;
+    if(+b.dataset.i===correct)b.classList.add('correct');
+    else if(+b.dataset.i===chosen&&chosen!==correct)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('qs-fb');
+  if(chosen===correct){
+    QS.score++;QS.streak++;QS.ok++;
+    document.getElementById('qs-score').textContent=QS.score;
+    document.getElementById('qs-streak').textContent=QS.streak;
+    updateStreak(QS.streak);
+    fb.textContent=QS.streak>4?`🔥 SÉRIE ${QS.streak}! +${10+QS.streak}XP`:'✓ CORRECT · +10XP';
+    fb.className='fb good';
+  } else {
+    QS.streak=0;document.getElementById('qs-streak').textContent=0;
+    fb.textContent=chosen===-1?`⏱ TEMPS — ${correctTxt}`:`✗ FAUX — ${correctTxt}`;
+    fb.className='fb bad';
+  }
+  document.getElementById('qs-acc').textContent=Math.round(QS.ok/QS.ans*100)+'%';
+  QS.idx++;
+  if(QS.ans%5===0) addXP(QS.score*2,'QUIZ',QS.ok,QS.ans);
+  setTimeout(loadQ,1700);
+}
+
+/* ═══════════════════════════
+   MODULE 02 · MATH SPRINT
+   ═══════════════════════════ */
+let MS={};let MT=null;
+function initMath(){
+  MS={score:0,streak:0,running:false,time:60};
+  ['ms-score','ms-streak'].forEach(id=>document.getElementById(id).textContent=0);
+  document.getElementById('ms-time').textContent=60;
+  document.getElementById('ms-tbar').style.width='100%';
+  document.getElementById('ms-fb').textContent='';
+  document.getElementById('ms-rec').textContent=U.mathRec;
+  const inp=document.getElementById('ms-in');inp.value='';inp.disabled=true;
+  document.getElementById('ms-start').style.display='block';
+  document.getElementById('ms-q').textContent='? + ? = ?';
+}
+function startMath(){
+  document.getElementById('ms-start').style.display='none';
+  const inp=document.getElementById('ms-in');inp.disabled=false;inp.focus();
+  MS.running=true;genMath();
+  MT=setInterval(()=>{
+    MS.time--;document.getElementById('ms-time').textContent=MS.time;
+    document.getElementById('ms-tbar').style.width=(MS.time/60*100)+'%';
+    if(MS.time<=0){clearInterval(MT);endMath();}
+  },1000);
+  inp.onkeydown=e=>{if(e.key==='Enter')checkMath();};
+}
+function genMath(){
+  const diff=Math.min(Math.floor(MS.score/8),3);
+  const ops=diff<2?['+','-']:diff<3?['+','-','×']:['+','-','×','÷'];
+  const op=ops[rnd(0,ops.length-1)];
+  let a,b;
+  if(op==='+'){a=rnd(1,50+diff*20);b=rnd(1,50+diff*20);MS.ans=a+b;}
+  else if(op==='-'){a=rnd(10,80);b=rnd(1,a);MS.ans=a-b;}
+  else if(op==='×'){a=rnd(2,12+diff*2);b=rnd(2,12+diff*2);MS.ans=a*b;}
+  else{const x=rnd(2,12),y=rnd(2,10);a=x*y;b=y;MS.ans=x;}
+  document.getElementById('ms-q').textContent=`${a} ${op} ${b} = ?`;
+  document.getElementById('ms-in').value='';
+}
+function checkMath(){
+  if(!MS.running)return;
+  const v=parseInt(document.getElementById('ms-in').value);
+  const fb=document.getElementById('ms-fb');
+  if(v===MS.ans){
+    MS.score++;MS.streak++;
+    document.getElementById('ms-score').textContent=MS.score;
+    document.getElementById('ms-streak').textContent=MS.streak;
+    updateStreak(MS.streak);
+    fb.textContent=MS.streak>4?`🔥 SÉRIE ${MS.streak} !`:'✓ CORRECT';fb.className='fb good';
+  } else {
+    MS.streak=0;document.getElementById('ms-streak').textContent=0;
+    fb.textContent=`✗ FAUX — ${MS.ans}`;fb.className='fb bad';
+  }
+  genMath();
+}
+function endMath(){
+  MS.running=false;document.getElementById('ms-in').disabled=true;
+  if(MS.score>U.mathRec){U.mathRec=MS.score;saveUser();}
+  document.getElementById('ms-rec').textContent=U.mathRec;
+  addXP(MS.score*5,'MATH SPRINT',MS.score,MS.score+1);
+  document.getElementById('ms-fb').textContent=`⚡ ${MS.score} RÉPONSES · RECORD: ${U.mathRec}`;
+  document.getElementById('ms-fb').className='fb good';
+  const btn=document.getElementById('ms-start');
+  btn.textContent='🔄 REJOUER';btn.onclick=initMath;btn.style.display='block';
+}
+
+/* ═══════════════════════════
+   MODULE 03 · FLAGS (70 pays)
+   ═══════════════════════════ */
+// emoji + unicode text fallback
+const COUNTRIES=[
+  {e:'🇫🇷',t:'FR',n:'France',c:'Paris'},         {e:'🇩🇪',t:'DE',n:'Allemagne',c:'Berlin'},
+  {e:'🇯🇵',t:'JP',n:'Japon',c:'Tokyo'},           {e:'🇧🇷',t:'BR',n:'Brésil',c:'Brasília'},
+  {e:'🇮🇳',t:'IN',n:'Inde',c:'New Delhi'},        {e:'🇲🇦',t:'MA',n:'Maroc',c:'Rabat'},
+  {e:'🇰🇷',t:'KR',n:'Corée du Sud',c:'Séoul'},    {e:'🇦🇺',t:'AU',n:'Australie',c:'Canberra'},
+  {e:'🇧🇪',t:'BE',n:'Belgique',c:'Bruxelles'},    {e:'🇲🇽',t:'MX',n:'Mexique',c:'Mexico'},
+  {e:'🇮🇹',t:'IT',n:'Italie',c:'Rome'},            {e:'🇨🇦',t:'CA',n:'Canada',c:'Ottawa'},
+  {e:'🇳🇴',t:'NO',n:'Norvège',c:'Oslo'},           {e:'🇸🇦',t:'SA',n:'Arabie Saoudite',c:'Riyad'},
+  {e:'🇹🇷',t:'TR',n:'Turquie',c:'Ankara'},         {e:'🇿🇦',t:'ZA',n:'Afrique du Sud',c:'Pretoria'},
+  {e:'🇦🇷',t:'AR',n:'Argentine',c:'Buenos Aires'},{e:'🇨🇳',t:'CN',n:'Chine',c:'Pékin'},
+  {e:'🇪🇬',t:'EG',n:'Égypte',c:'Le Caire'},        {e:'🇵🇱',t:'PL',n:'Pologne',c:'Varsovie'},
+  {e:'🇵🇹',t:'PT',n:'Portugal',c:'Lisbonne'},     {e:'🇳🇱',t:'NL',n:'Pays-Bas',c:'Amsterdam'},
+  {e:'🇸🇪',t:'SE',n:'Suède',c:'Stockholm'},        {e:'🇨🇭',t:'CH',n:'Suisse',c:'Berne'},
+  {e:'🇬🇷',t:'GR',n:'Grèce',c:'Athènes'},          {e:'🇵🇪',t:'PE',n:'Pérou',c:'Lima'},
+  {e:'🇨🇴',t:'CO',n:'Colombie',c:'Bogotá'},        {e:'🇨🇱',t:'CL',n:'Chili',c:'Santiago'},
+  {e:'🇺🇦',t:'UA',n:'Ukraine',c:'Kiev'},            {e:'🇷🇴',t:'RO',n:'Roumanie',c:'Bucarest'},
+  {e:'🇭🇺',t:'HU',n:'Hongrie',c:'Budapest'},       {e:'🇨🇿',t:'CZ',n:'Rép. tchèque',c:'Prague'},
+  {e:'🇦🇹',t:'AT',n:'Autriche',c:'Vienne'},        {e:'🇩🇰',t:'DK',n:'Danemark',c:'Copenhague'},
+  {e:'🇫🇮',t:'FI',n:'Finlande',c:'Helsinki'},      {e:'🇮🇪',t:'IE',n:'Irlande',c:'Dublin'},
+  {e:'🇳🇿',t:'NZ',n:'Nouvelle-Zélande',c:'Wellington'},{e:'🇸🇬',t:'SG',n:'Singapour',c:'Singapour'},
+  {e:'🇹🇭',t:'TH',n:'Thaïlande',c:'Bangkok'},      {e:'🇻🇳',t:'VN',n:'Vietnam',c:'Hanoï'},
+  {e:'🇵🇭',t:'PH',n:'Philippines',c:'Manille'},    {e:'🇮🇩',t:'ID',n:'Indonésie',c:'Jakarta'},
+  {e:'🇲🇾',t:'MY',n:'Malaisie',c:'Kuala Lumpur'}, {e:'🇵🇰',t:'PK',n:'Pakistan',c:'Islamabad'},
+  {e:'🇧🇩',t:'BD',n:'Bangladesh',c:'Dacca'},       {e:'🇳🇬',t:'NG',n:'Nigeria',c:'Abuja'},
+  {e:'🇰🇪',t:'KE',n:'Kenya',c:'Nairobi'},           {e:'🇬🇭',t:'GH',n:'Ghana',c:'Accra'},
+  {e:'🇸🇳',t:'SN',n:'Sénégal',c:'Dakar'},          {e:'🇨🇮',t:'CI',n:"Côte d'Ivoire",c:'Yamoussoukro'},
+  {e:'🇪🇹',t:'ET',n:'Éthiopie',c:'Addis-Abeba'},   {e:'🇹🇿',t:'TZ',n:'Tanzanie',c:'Dodoma'},
+  {e:'🇮🇷',t:'IR',n:'Iran',c:'Téhéran'},            {e:'🇮🇶',t:'IQ',n:'Irak',c:'Bagdad'},
+  {e:'🇦🇪',t:'AE',n:'Émirats arabes unis',c:'Abou Dabi'},{e:'🇮🇱',t:'IL',n:'Israël',c:'Jérusalem'},
+  {e:'🇯🇴',t:'JO',n:'Jordanie',c:'Amman'},          {e:'🇱🇧',t:'LB',n:'Liban',c:'Beyrouth'},
+  {e:'🇷🇺',t:'RU',n:'Russie',c:'Moscou'},           {e:'🇺🇸',t:'US',n:'États-Unis',c:'Washington D.C.'},
+  {e:'🇬🇧',t:'GB',n:'Royaume-Uni',c:'Londres'},    {e:'🇪🇸',t:'ES',n:'Espagne',c:'Madrid'},
+  {e:'🇰🇿',t:'KZ',n:'Kazakhstan',c:'Astana'},       {e:'🇲🇲',t:'MM',n:'Myanmar',c:'Naypyidaw'},
+  {e:'🇨🇺',t:'CU',n:'Cuba',c:'La Havane'},          {e:'🇨🇷',t:'CR',n:'Costa Rica',c:'San José'},
+  {e:'🇧🇴',t:'BO',n:'Bolivie',c:'Sucre'},           {e:'🇵🇾',t:'PY',n:'Paraguay',c:'Asunción'},
+  {e:'🇦🇱',t:'AL',n:'Albanie',c:'Tirana'},          {e:'🇷🇸',t:'RS',n:'Serbie',c:'Belgrade'},
+];
+
+// Detect emoji flag support
+let emojiOK=null;
+function checkEmoji(){
+  if(emojiOK!==null)return emojiOK;
+  const cv=document.createElement('canvas');cv.width=cv.height=20;
+  const ctx=cv.getContext('2d');ctx.font='16px serif';ctx.fillText('🇫🇷',0,16);
+  const d=ctx.getImageData(0,0,20,20).data;
+  emojiOK=d.some(v=>v>0);return emojiOK;
+}
+
+let FS={};
+function initFlags(){
+  FS={pool:shuffle(COUNTRIES),idx:0,score:0,streak:0,ok:0,ans:0,phase:'country'};
+  ['fs-score','fs-num','fs-streak'].forEach(id=>document.getElementById(id).textContent=0);
+  document.getElementById('fs-acc').textContent='—';
+  loadFlag();
+}
+function loadFlag(){
+  if(FS.idx>=FS.pool.length) FS.pool=[...FS.pool,...shuffle(COUNTRIES)];
+  const ctry=FS.pool[FS.idx];
+  const emoEl=document.getElementById('fs-emoji');
+  const txtEl=document.getElementById('fs-text');
+  const subEl=document.getElementById('fs-sub');
+  if(checkEmoji()){
+    emoEl.textContent=ctry.e;emoEl.style.display='block';txtEl.style.display='none';
+    subEl.textContent='';
+  } else {
+    emoEl.style.display='none';
+    txtEl.textContent=ctry.t;txtEl.style.display='block';
+    subEl.textContent='(code ISO du pays)';
+  }
+  document.getElementById('fs-num').textContent=FS.idx+1;
+  document.getElementById('fs-fb').textContent='';document.getElementById('fs-fb').className='fb';
+  const opts=document.getElementById('fs-opts');opts.innerHTML='';
+  if(FS.phase==='country'){
+    document.getElementById('fs-hint').textContent='// IDENTIFIE CE PAYS';
+    const wrong=shuffle(COUNTRIES.filter(x=>x.n!==ctry.n)).slice(0,3).map(x=>x.n);
+    shuffle([ctry.n,...wrong]).forEach(name=>{
+      const b=document.createElement('button');b.className='opt';b.textContent=name;
+      b.onclick=()=>answerFlag(name,ctry.n,ctry,'country');opts.appendChild(b);
+    });
+  } else {
+    document.getElementById('fs-hint').textContent=`// CAPITALE DE ${ctry.n.toUpperCase()} ?`;
+    const wrong=shuffle(COUNTRIES.filter(x=>x.c!==ctry.c)).slice(0,3).map(x=>x.c);
+    shuffle([ctry.c,...wrong]).forEach(cap=>{
+      const b=document.createElement('button');b.className='opt';b.textContent=cap;
+      b.onclick=()=>answerFlag(cap,ctry.c,ctry,'capital');opts.appendChild(b);
+    });
+  }
+}
+function answerFlag(chosen,correct,ctry,phase){
+  FS.ans++;
+  document.querySelectorAll('#fs-opts .opt').forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===correct)b.classList.add('correct');
+    else if(b.textContent===chosen&&chosen!==correct)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('fs-fb');
+  if(chosen===correct){
+    FS.score++;FS.streak++;FS.ok++;
+    document.getElementById('fs-score').textContent=FS.score;
+    document.getElementById('fs-streak').textContent=FS.streak;
+    updateStreak(FS.streak);
+    fb.textContent='✓ CORRECT';fb.className='fb good';
+  } else {
+    FS.streak=0;document.getElementById('fs-streak').textContent=0;
+    fb.textContent=`✗ FAUX — ${correct}`;fb.className='fb bad';
+  }
+  document.getElementById('fs-acc').textContent=Math.round(FS.ok/FS.ans*100)+'%';
+  setTimeout(()=>{
+    if(phase==='country'){FS.phase='capital';loadFlag();}
+    else{
+      FS.phase='country';FS.idx++;loadFlag();
+      if(FS.ans%10===0) addXP(FS.score*3,'FLAGS',FS.ok,FS.ans);
+    }
+  },1400);
+}
+
+/* ═══════════════════════════
+   MODULE 04 · PENDU — 250+
+   ═══════════════════════════ */
+const WORDS=[
+  // NATURE
+  {w:'GIRAFE',h:'Animal à long cou 🦒',c:'NATURE'},{w:'DAUPHIN',h:'Mammifère marin 🐬',c:'NATURE'},
+  {w:'VOLCAN',h:'Cracheur de lave 🌋',c:'NATURE'},{w:'PYTHON',h:'Grand serpent 🐍',c:'NATURE'},
+  {w:'POULPE',h:'8 bras 🐙',c:'NATURE'},{w:'REQUIN',h:'Prédateur des mers 🦈',c:'NATURE'},
+  {w:'JAGUAR',h:'Félin américain 🐆',c:'NATURE'},{w:'PERROQUET',h:'Oiseau qui parle 🦜',c:'NATURE'},
+  {w:'MANCHOT',h:'Ne vole pas 🐧',c:'NATURE'},{w:'HIPPOPOTAME',h:'Semi-aquatique 🦛',c:'NATURE'},
+  {w:'CAMELEON',h:'Change de couleur 🦎',c:'NATURE'},{w:'PAPILLON',h:'Ailes colorées 🦋',c:'NATURE'},
+  {w:'RHINOCEROS',h:'A une corne 🦏',c:'NATURE'},{w:'TORTUE',h:'Carapace 🐢',c:'NATURE'},
+  {w:'HIBOU',h:'Oiseau nocturne 🦉',c:'NATURE'},{w:'FLAMANT',h:'Oiseau rose 🦩',c:'NATURE'},
+  {w:'GORILLE',h:'Grand singe 🦍',c:'NATURE'},{w:'PARESSEUX',h:'Animal très lent 🦥',c:'NATURE'},
+  {w:'TATOU',h:'Animal à carapace articulée',c:'NATURE'},{w:'PIEUVRE',h:'Mollusque à tentacules 🐙',c:'NATURE'},
+  {w:'SCORPION',h:'Arachnide venimeux 🦂',c:'NATURE'},{w:'LIBELLULE',h:'Insecte ailé 🪲',c:'NATURE'},
+  {w:'CIGOGNE',h:'Oiseau migrateur',c:'NATURE'},{w:'SURICATE',h:'Petit mammifère africain',c:'NATURE'},
+  // TECH
+  {w:'ALGORITHME',h:'Suite d\'instructions 💻',c:'TECH'},{w:'ORDINATEUR',h:'Machine à calculer 🖥️',c:'TECH'},
+  {w:'INTERNET',h:'Réseau mondial 🌐',c:'TECH'},{w:'LOGICIEL',h:'Programme informatique',c:'TECH'},
+  {w:'PROCESSEUR',h:'Cerveau de l\'ordi 🔧',c:'TECH'},{w:'SERVEUR',h:'Héberge des données',c:'TECH'},
+  {w:'CRYPTAGE',h:'Chiffrement 🔐',c:'TECH'},{w:'SATELLITE',h:'En orbite 🛰️',c:'TECH'},
+  {w:'BLUETOOTH',h:'Sans fil courte portée 📶',c:'TECH'},{w:'PIXEL',h:'Point d\'image',c:'TECH'},
+  {w:'BINAIRE',h:'Système 0 et 1',c:'TECH'},{w:'NAVIGATEUR',h:'Accède au web',c:'TECH'},
+  {w:'PROTOCOLE',h:'Règles de communication réseau',c:'TECH'},{w:'INTERFACE',h:'Point de contact homme-machine',c:'TECH'},
+  {w:'VARIABLE',h:'Conteneur de données',c:'TECH'},{w:'FONCTION',h:'Bloc de code réutilisable',c:'TECH'},
+  {w:'DEBUGGER',h:'Outil de correction de bugs',c:'TECH'},{w:'TERMINAL',h:'Console de commande',c:'TECH'},
+  // GÉO
+  {w:'PYRAMIDE',h:'Monument égyptien 🏛️',c:'GÉO'},{w:'HIMALAYA',h:'Plus haute chaîne 🏔️',c:'GÉO'},
+  {w:'AMAZONE',h:'Grand fleuve 🌿',c:'GÉO'},{w:'ARCTIQUE',h:'Pôle Nord ❄️',c:'GÉO'},
+  {w:'EQUATEUR',h:'Ligne imaginaire 🌍',c:'GÉO'},{w:'TROPIQUES',h:'Zone chaude 🌞',c:'GÉO'},
+  {w:'MERIDIEN',h:'Ligne N-S sur le globe',c:'GÉO'},{w:'LATITUDE',h:'Distance à l\'équateur',c:'GÉO'},
+  {w:'LONGITUDE',h:'Distance au méridien de Greenwich',c:'GÉO'},{w:'ARCHIPEL',h:'Groupe d\'îles',c:'GÉO'},
+  {w:'PENINSULE',h:'Terre entourée d\'eau sur 3 côtés',c:'GÉO'},{w:'ISTHME',h:'Bande de terre entre deux mers',c:'GÉO'},
+  // SCIENCE
+  {w:'MOLECULE',h:'Assemblage d\'atomes ⚗️',c:'SCI'},{w:'GRAVITE',h:'Force d\'attraction 🌍',c:'SCI'},
+  {w:'ELECTRON',h:'Particule chargée négativement ⚡',c:'SCI'},{w:'PROTON',h:'Noyau chargé positivement',c:'SCI'},
+  {w:'VACCIN',h:'Préparation immunitaire 💉',c:'SCI'},{w:'CHROMOSOME',h:'Structure ADN 🧬',c:'SCI'},
+  {w:'GALAXIE',h:'Ensemble d\'étoiles 🌌',c:'SCI'},{w:'SUPERNOVA',h:'Explosion stellaire ⭐',c:'SCI'},
+  {w:'PHOTON',h:'Particule de lumière ☀️',c:'SCI'},{w:'NEURONE',h:'Cellule nerveuse 🧠',c:'SCI'},
+  {w:'ISOTOPE',h:'Variante d\'un atome',c:'SCI'},{w:'OSMOSE',h:'Passage à travers une membrane',c:'SCI'},
+  {w:'PHOTOSYNTHESE',h:'Énergie du Soleil → nourriture 🌿',c:'SCI'},{w:'EVOLUTION',h:'Théorie de Darwin',c:'SCI'},
+  {w:'MUTATION',h:'Changement dans l\'ADN',c:'SCI'},{w:'SYMBIOSE',h:'Relation mutuellement bénéfique',c:'SCI'},
+  // FOOD
+  {w:'CROISSANT',h:'Viennoiserie 🥐',c:'FOOD'},{w:'FROMAGE',h:'Produit laitier 🧀',c:'FOOD'},
+  {w:'CHOCOLAT',h:'À base de cacao 🍫',c:'FOOD'},{w:'AVOCAT',h:'Fruit vert 🥑',c:'FOOD'},
+  {w:'FRAMBOISE',h:'Petit fruit rouge 🍓',c:'FOOD'},{w:'AUBERGINE',h:'Légume violet 🍆',c:'FOOD'},
+  {w:'BOULANGERIE',h:'Fabrique le pain 🍞',c:'FOOD'},{w:'PATISSERIE',h:'Art des gâteaux 🎂',c:'FOOD'},
+  {w:'COURGETTE',h:'Légume vert allongé',c:'FOOD'},{w:'CITRONELLE',h:'Herbe aromatique asiatique',c:'FOOD'},
+  {w:'CANNELLE',h:'Épice sucrée',c:'FOOD'},{w:'CARDAMOME',h:'Épice indienne',c:'FOOD'},
+  {w:'TIRAMISU',h:'Dessert italien au café',c:'FOOD'},{w:'CROQUET',h:'Petit biscuit croquant',c:'FOOD'},
+  // ARTS
+  {w:'SYMPHONIE',h:'Grande composition 🎼',c:'ARTS'},{w:'SCULPTURE',h:'Art de la matière 🗿',c:'ARTS'},
+  {w:'CINEMA',h:'7ème art 🎬',c:'ARTS'},{w:'THEATRE',h:'Art de la scène 🎭',c:'ARTS'},
+  {w:'OPERA',h:'Art lyrique 🎤',c:'ARTS'},{w:'FRESQUE',h:'Peinture murale',c:'ARTS'},
+  {w:'AQUARELLE',h:'Peinture à l\'eau',c:'ARTS'},{w:'CALLIGRAPHIE',h:'Art de l\'écriture',c:'ARTS'},
+  {w:'ORIGAMI',h:'Art du pliage japonais',c:'ARTS'},{w:'TAPISSERIE',h:'Tissu artistique',c:'ARTS'},
+  {w:'GRAVURE',h:'Impression sur plaque',c:'ARTS'},{w:'LITHOGRAPHIE',h:'Impression sur pierre',c:'ARTS'},
+  // SPORT
+  {w:'MARATHON',h:'Course de 42 km 🏃',c:'SPORT'},{w:'NATATION',h:'Sport aquatique 🏊',c:'SPORT'},
+  {w:'ESCRIME',h:'Combat à l\'épée 🤺',c:'SPORT'},{w:'CYCLISME',h:'À vélo 🚴',c:'SPORT'},
+  {w:'TRIATHLON',h:'3 disciplines 🏅',c:'SPORT'},{w:'JUDO',h:'Art martial japonais 🥋',c:'SPORT'},
+  {w:'PLONGEON',h:'Saut acrobatique 🤽',c:'SPORT'},{w:'VOLLEYBALL',h:'Filet + ballon 🏐',c:'SPORT'},
+  {w:'HANDBALL',h:'Sport collectif 🤾',c:'SPORT'},{w:'BOBSLEIGH',h:'Sport d\'hiver sur glace',c:'SPORT'},
+  {w:'HALTERE',h:'Poids d\'haltérophilie',c:'SPORT'},{w:'PENTATHLON',h:'5 disciplines',c:'SPORT'},
+  // DIVERS
+  {w:'FUSEE',h:'Va dans l\'espace 🚀',c:'DIV'},{w:'PARACHUTE',h:'Descente lente 🪂',c:'DIV'},
+  {w:'LABYRINTHE',h:'Dédale de couloirs 🌀',c:'DIV'},{w:'TALISMAN',h:'Porte-bonheur 🔮',c:'DIV'},
+  {w:'PARADOXE',h:'Contradiction apparente 🤔',c:'DIV'},{w:'ENIGME',h:'Devinette mystérieuse 🎯',c:'DIV'},
+  {w:'ECLIPSE',h:'Occultation d\'un astre ☀️',c:'DIV'},{w:'ILLUSION',h:'Perception trompeuse 🪄',c:'DIV'},
+  {w:'MYSTERE',h:'Inexpliqué 👁️',c:'DIV'},{w:'MOLECULE',h:'Assemblage d\'atomes',c:'DIV'},
+  {w:'HOLOGRAMME',h:'Image en 3D',c:'DIV'},{w:'MAGNETISME',h:'Force d\'attraction/répulsion',c:'DIV'},
+  {w:'PHENOMONE',h:'Fait remarquable',c:'DIV'},{w:'RENAISSANCE',h:'Période historique artistique',c:'DIV'},
+];
+
+const HPARTS=['hp-head','hp-body','hp-la','hp-ra','hp-ll','hp-rl'];
+let HS={},HPOOL=[];
+function initHangman(){
+  if(!HPOOL.length) HPOOL=shuffle(WORDS);
+  const w=HPOOL.shift();
+  HS={word:w.w,hint:w.h,cat:w.c,guessed:new Set(),errors:0,score:parseInt(document.getElementById('hs-score').textContent)||0};
+  document.getElementById('hs-err').textContent=0;
+  document.getElementById('hs-cat').textContent=w.c;
+  document.getElementById('hs-hint').textContent='💡 '+w.h;
+  document.getElementById('hs-fb').textContent='';
+  HPARTS.forEach(id=>document.getElementById(id).style.display='none');
+  renderHWord();renderKbd();
+}
+function renderHWord(){
+  const c=document.getElementById('hs-word');c.innerHTML='';
+  HS.word.split('').forEach(ch=>{
+    if(ch===' '){const s=document.createElement('div');s.style.width='16px';c.appendChild(s);return;}
+    const d=document.createElement('div');d.className='lbox';
+    d.textContent=HS.guessed.has(ch)?ch:'';c.appendChild(d);
+  });
+}
+function renderKbd(){
+  const kb=document.getElementById('hs-kbd');kb.innerHTML='';
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(ch=>{
+    const b=document.createElement('button');b.className='kb';b.textContent=ch;
+    if(HS.guessed.has(ch)){b.disabled=true;b.classList.add(HS.word.includes(ch)?'hit':'miss');}
+    b.onclick=()=>guessLetter(ch);kb.appendChild(b);
+  });
+}
+function guessLetter(ch){
+  HS.guessed.add(ch);renderHWord();renderKbd();
+  const fb=document.getElementById('hs-fb');
+  if(!HS.word.includes(ch)){
+    HS.errors++;document.getElementById('hs-err').textContent=HS.errors;
+    document.getElementById(HPARTS[HS.errors-1]).style.display='';
+    fb.textContent=`✗ PAS DE "${ch}"`;fb.className='fb bad';
+  } else {fb.textContent='✓ BIEN JOUÉ';fb.className='fb good';}
+  const won=HS.word.split('').every(c=>HS.guessed.has(c)||c===' ');
+  if(won){
+    HS.score++;document.getElementById('hs-score').textContent=HS.score;
+    addXP(20,'PENDU',1,1);
+    fb.textContent=`🎉 TROUVÉ : ${HS.word} · +20XP`;fb.className='fb good';
+    document.getElementById('hs-kbd').innerHTML='';
+    setTimeout(initHangman,1800);
+  } else if(HS.errors>=6){
+    fb.textContent=`💀 PERDU — ${HS.word}`;fb.className='fb bad';
+    HS.word.split('').forEach(c=>HS.guessed.add(c));renderHWord();
+    const btn=document.createElement('button');btn.className='act';btn.textContent='🔄 RÉESSAYER';btn.onclick=initHangman;
+    document.getElementById('hs-kbd').innerHTML='';document.getElementById('hs-kbd').appendChild(btn);
+  }
+}
+
+/* ═══════════════════════════
+   MODULE 05 · MEMORY
+   ═══════════════════════════ */
+const MEM_EMOJIS=['🦊','🐬','🦋','🌺','🍕','🎸','🚀','⚡','🌈','🦄','🎭','🏆','🔮','🎯','🌙','💎','🐉','🦅','🎪','🧨'];
+let MM={};
+function initMemory(){
+  const rec=U.memRec<9999?U.memRec:'—';
+  document.getElementById('mm-rec').textContent=rec;
+  const chosen=shuffle([...MEM_EMOJIS]).slice(0,8);
+  const cards=shuffle([...chosen,...chosen]);
+  MM={cards,flipped:[],matched:new Set(),moves:0,pairs:0,locked:false};
+  document.getElementById('mm-moves').textContent=0;
+  document.getElementById('mm-pairs').textContent=0;
+  document.getElementById('mm-fb').textContent='';
+  renderMem();
+}
+function renderMem(){
+  const g=document.getElementById('mm-grid');g.innerHTML='';
+  MM.cards.forEach((e,i)=>{
+    const c=document.createElement('div');
+    c.className='mc'+(MM.matched.has(i)?' matched flipped':'');
+    c.innerHTML=`<div class="mc-f">▣</div><div class="mc-b">${e}</div>`;
+    if(!MM.matched.has(i))c.onclick=()=>flipMem(i);
+    g.appendChild(c);
+  });
+}
+function flipMem(i){
+  if(MM.locked||MM.flipped.includes(i)||MM.matched.has(i))return;
+  MM.flipped.push(i);
+  document.querySelectorAll('.mc')[i].classList.add('flipped');
+  if(MM.flipped.length===2){
+    MM.moves++;document.getElementById('mm-moves').textContent=MM.moves;
+    MM.locked=true;
+    const[a,b]=MM.flipped;
+    if(MM.cards[a]===MM.cards[b]){
+      MM.matched.add(a);MM.matched.add(b);MM.pairs++;
+      document.getElementById('mm-pairs').textContent=MM.pairs;
+      const cs=document.querySelectorAll('.mc');
+      cs[a].classList.add('matched');cs[b].classList.add('matched');
+      MM.flipped=[];MM.locked=false;
+      if(MM.pairs===8){
+        if(MM.moves<U.memRec){U.memRec=MM.moves;saveUser();}
+        document.getElementById('mm-rec').textContent=U.memRec;
+        addXP(Math.max(100-MM.moves*3,20),'MEMORY',8,8);
+        document.getElementById('mm-fb').textContent=`🏆 TERMINÉ EN ${MM.moves} COUPS !`;
+        document.getElementById('mm-fb').className='fb good';
+      }
+    } else {
+      setTimeout(()=>{
+        const cs=document.querySelectorAll('.mc');
+        cs[a].classList.remove('flipped');cs[b].classList.remove('flipped');
+        MM.flipped=[];MM.locked=false;
+      },950);
+    }
+  }
+}
+
+/* ═══════════════════════════
+   MODULE 06 · TYPING SPEED
+   ═══════════════════════════ */
+const TEXTS=[
+  "Le renard rapide saute par-dessus le chien paresseux pour attraper une souris.",
+  "La programmation est l'art de résoudre des problèmes complexes avec élégance et précision.",
+  "Chaque jour est une nouvelle opportunité d'apprendre et de progresser dans sa discipline.",
+  "Les étoiles brillent dans le ciel sombre de la nuit claire et froide d'hiver.",
+  "Voyager permet de découvrir d'autres cultures et d'élargir ses horizons de façon considérable.",
+  "L'intelligence artificielle transforme rapidement notre façon de travailler et de communiquer.",
+  "La musique est le langage universel qui unit les peuples à travers le monde entier.",
+  "Les ordinateurs modernes effectuent des milliards d'opérations par seconde avec une grande précision.",
+  "La lecture régulière enrichit le vocabulaire et stimule l'imagination de manière remarquable.",
+  "Apprendre une nouvelle langue ouvre des portes culturelles et professionnelles insoupçonnées.",
+  "La patience est une vertu rare qui permet d'atteindre ses objectifs les plus ambitieux.",
+  "Les mathématiques sont la base de toutes les sciences exactes et de l'ingénierie moderne.",
+  "La biodiversité est essentielle à l'équilibre des écosystèmes et à la survie des espèces.",
+  "Le développement durable cherche à répondre aux besoins présents sans compromettre l'avenir.",
+  "La philosophie nous invite à questionner nos certitudes et à explorer le sens de l'existence.",
+  "Les découvertes scientifiques du vingtième siècle ont radicalement changé notre vision du monde.",
+  "La créativité est la capacité de voir les choses différemment et d'inventer de nouvelles solutions.",
+  "L'astronomie nous rappelle que nous sommes de minuscules êtres dans un cosmos infini.",
+  "La gastronomie française est reconnue dans le monde entier pour sa finesse et sa diversité.",
+  "Le sport développe non seulement le corps mais aussi le caractère et l'esprit d'équipe.",
+];
+let TS={};
+function initTyping(){
+  document.getElementById('ts-rec').textContent=U.typRec||0;
+  TS={text:TEXTS[rnd(0,TEXTS.length-1)],typed:'',started:false,startTime:null,done:false};
+  const inp=document.getElementById('ts-in');inp.value='';inp.disabled=false;
+  ['ts-wpm','ts-time'].forEach(id=>document.getElementById(id).textContent=0);
+  document.getElementById('ts-acc').textContent=100;
+  document.getElementById('ts-fb').textContent='';document.getElementById('ts-fb').className='fb';
+  renderTyping();
+}
+function renderTyping(){
+  const txt=TS.text,typ=TS.typed;
+  let h='';
+  for(let i=0;i<txt.length;i++){
+    const ch=txt[i]==='<'?'&lt;':txt[i]==='>'?'&gt;':txt[i]==='&'?'&amp;':txt[i];
+    if(i<typ.length)h+=`<span class="d">${ch}</span>`;
+    else if(i===typ.length)h+=`<span class="c">${ch}</span>`;
+    else h+=`<span class="t">${ch}</span>`;
+  }
+  document.getElementById('ts-box').innerHTML=h;
+}
+function typingInput(){
+  if(TS.done)return;
+  const v=document.getElementById('ts-in').value;
+  if(!TS.started){TS.started=true;TS.startTime=Date.now();}
+  let errs=0;for(let i=0;i<v.length;i++)if(v[i]!==TS.text[i])errs++;
+  TS.typed=v;renderTyping();
+  const el=(Date.now()-TS.startTime)/1000;
+  const wpm=el>0?Math.round((v.trim().split(/\s+/).filter(Boolean).length/el)*60):0;
+  const acc=v.length>0?Math.round(((v.length-errs)/v.length)*100):100;
+  document.getElementById('ts-wpm').textContent=wpm;
+  document.getElementById('ts-acc').textContent=acc;
+  document.getElementById('ts-time').textContent=Math.round(el);
+  if(v===TS.text){
+    TS.done=true;
+    if(wpm>U.typRec){U.typRec=wpm;saveUser();}
+    document.getElementById('ts-rec').textContent=U.typRec;
+    document.getElementById('ts-in').disabled=true;
+    document.getElementById('ts-fb').textContent=`⚡ ${wpm} MOT/MIN · ${acc}% · +${wpm}XP · RECORD: ${U.typRec}`;
+    document.getElementById('ts-fb').className='fb good';
+    addXP(wpm,'TYPING SPEED',acc,100);
+  }
+}
+
+/* ── INIT ── */
+document.getElementById('pm-inp').focus();
+</script>
+</body>
+</html>
